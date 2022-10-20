@@ -1,0 +1,22 @@
+﻿body {
+}
+
+
+a.disable {
+    pointer-events: none;
+    cursor: default;
+    text-decoration: none;
+    color: black;
+}
+
+.notRead {
+    background-color: #dce0e0 !important;
+}
+
+tr.email_detail:hover{
+    cursor: pointer;
+}
+
+td.choose-cate {
+    cursor: pointer;
+}

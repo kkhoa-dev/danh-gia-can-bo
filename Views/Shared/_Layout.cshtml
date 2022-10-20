@@ -1,0 +1,141 @@
+﻿@using DanhGiaCanBo.Models;
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>@ViewBag.Title | TTHCC Bình Dương</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="~/Assets/Client/img/favicon.png" rel="icon">
+    <link href="~/Assets/Client/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+    <!-- Google Fonts -->
+    @*<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">*@
+
+    <!-- Vendor CSS Files -->
+    <link href="~/Assets/Client/vendor/animate.css/animate.min.css" rel="stylesheet">
+    <link href="~/Assets/Client/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="~/Assets/Client/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="~/Assets/Client/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <!-- Template Main CSS File -->
+    <link href="~/Assets/Client/css/style.css" rel="stylesheet">
+    <link href="~/Assets/Admin/notify/css/BrightTheme.css" rel="stylesheet" />
+    <link href="~/Assets/Admin/notify/css/PNotify.css" rel="stylesheet" />
+    <link href="~/Assets/Admin/notify/css/PNotifyBootstrap3.css" rel="stylesheet" />
+    <link href="~/Assets/Admin/notify/css/PNotifyConfirm.css" rel="stylesheet" />
+    <script src="~/Assets/Admin/notify/js/PNotify.js"></script>
+    <script src="~/Assets/Admin/notify/js/PNotifyBootstrap3.js"></script>
+    <script src="~/Assets/Admin/notify/js/PNotifyConfirm.js"></script>
+    <!-- =======================================================
+    * Template Name: EstateAgency - v4.3.0
+    * Template URL: https://bootstrapmade.com/real-estate-agency-bootstrap-template/
+    * Author: BootstrapMade.com
+    * License: https://bootstrapmade.com/license/
+    ======================================================== -->
+</head>
+
+<body>
+
+
+    <!-- ======= Header/Navbar ======= -->
+    <nav class="navbar navbar-default navbar-trans navbar-expand-lg fixed-top">
+        <div class="container">
+            <button class="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarDefault" aria-controls="navbarDefault" aria-expanded="false" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <a class="navbar-brand text-brand" href="/">
+                <img src="~/Assets/Client/img/Logobinhduong.png" style="width: 70px" />
+                <span class="text-uppercase">Trung tâm hành chính công tỉnh Bình Dương</span>
+            </a>
+
+            @*<div class="navbar-collapse collapse justify-content-center" id="navbarDefault">
+                    @if (!CookiesManage.Logined())
+                    {
+                        <a href="#" class="btn btn-primary">Đăng nhập</a>
+                    }
+
+                </div>
+                @if (CookiesManage.Logined())
+                {
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" style="color: #2eca6a;" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @CookiesManage.GetUser().HoTen
+                        </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item " href="/canbo/changepass">Đổi mật khẩu</a>
+                            <a class="dropdown-item " href="/canbo/logout">Đăng xuất</a>
+                        </div>
+                    </div>
+                }*@
+        </div>
+    </nav><!-- End Header/Navbar -->
+    @RenderBody()
+    <section class="section-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="widget-a">
+                        <div class="w-header-a">
+                            <h3 class="w-title-a text-brand text-uppercase">TRUNG TÂM HÀNH CHÍNH CÔNG TỈNH BÌNH DƯƠNG</h3>
+                        </div>
+                        
+                        <div class="w-footer-a">
+                            <ul class="list-unstyled">
+                                <li class="color-a">
+                                    <span class="color-text-a">Địa chỉ :</span> Tầng 1- tháp B Tòa nhà Trung tâm Hành chính tỉnh Bình Dương, Đường Lê Lợi, phường Hòa Phú, thành phố Thủ Dầu Một, tỉnh Bình Dương
+                                </li>
+                                <li class="color-a">
+                                    <span class="color-text-a">Điện thoại: </span> (0274) 361.6464
+                                </li>
+                                <li class="color-a">
+                                    <span class="color-text-a">Email .</span> hanhchinhcong@binhduong.gov.vn
+                                </li>
+                                <li class="color-a">
+                                    <span class="color-text-a">Hỗ trợ kỹ thuật .</span> Phòng Công nghệ thông tin - Kiểm tra giám sát, điện thoại: 0274.3.882 884
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="copyright-footer">
+                        <p class="copyright color-text-a">
+                            &copy; Copyright 2022
+                            <span class="color-a">Trung tâm hành chính công Bình Dương</span> All Rights Reserved.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer><!-- End  Footer -->
+
+    <div id="preloader"></div>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <!-- Vendor JS Files -->
+    <script src="~/Assets/Client/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/Assets/Client/vendor/php-email-form/validate.js"></script>
+    <script src="~/Assets/Client/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <!-- Template Main JS File -->
+    <script src="~/Assets/Client/js/main.js"></script>
+
+    @RenderSection("jsSection", required: false)
+</body>
+
+</html>

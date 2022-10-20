@@ -1,0 +1,219 @@
+﻿@using DanhGiaCanBo.Models.EF;
+@{
+    ViewBag.Title = "Thêm mới cán bộ";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var lstQuay = ViewBag.lstQuay as List<tbl_Quay>;
+}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Thêm mới cán bộ
+        </h1>
+        <ol class="breadcrumb">
+            <li><i class="fa fa-user"></i><a href="/admin/canbo">Quản lý cán bộ</a></li>
+            <li class="active">Thêm mới cán bộ</li>
+        </ol>
+    </section>
+
+    <section class="content">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-12">
+                <!-- general form elements -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Thêm mới cán bộ</h3>
+                    </div><!-- /.box-header -->
+                    <!-- form start -->
+                    @using (Html.BeginForm("frmAdd", "canbo", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmAdd" }))
+                    {
+                        <div class="box-body">
+                            <div class="form-group col-md-6">
+                                <label>Họ và tên</label>
+                                <input type="text" class="form-control" name="HoTen" placeholder="Nhập họ tên cán bộ">
+                            </div>
+
+                            <div class="form-group col-md-3">
+                                <label>Giới tính</label>
+                                <select class="form-control" name="GioiTinh">
+                                    <option value="">---Chọn---</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                </select>
+                            </div>
+
+                            
+                            <div class="form-group col-md-3">
+                                <label>Ngày sinh</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control datepicker" name="NgaySinh" >
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label id="lb_macb">Mã cán bộ</label>
+                                <input type="text" class="form-control" name="MaCB" placeholder="Nhập mã cán bộ">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Mật khẩu</label>
+                                <input type="password" class="form-control" name="MatKhau" placeholder="Nhập mật khẩu...">
+                            </div>
+                             <div class="form-group col-md-6">
+                                <label>Quê quán</label>
+                                <input type="text" class="form-control" name="QueQuan" placeholder="Nhập quê quán">
+                            </div>
+                             <div class="form-group col-md-3">
+                                <label>Số điện thoại</label>
+                                <input type="text" class="form-control" name="SDT" placeholder="Nhập số điện thoại">
+                            </div>
+                             <div class="form-group col-md-3">
+                                 <label>Ngày bắt đầu làm việc</label>
+                                 <div class="input-group">
+                                     <div class="input-group-addon">
+                                         <i class="fa fa-calendar"></i>
+                                     </div>
+                                     <input type="date" class="form-control" name="NgayLamViec">
+                                 </div>
+                             </div>
+                            <div class="form-group col-md-12">
+                                <label>Giới thiệu</label>
+                                <textarea name="GioiThieu" id="Descriptions" rows="10" cols="80"></textarea>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Hình ảnh đại diện</label>
+                                <input type="file" name="Anh" id="imgInp" accept="image/*"><br>
+                                <img id="blah" src="~/Assets/Client/img/empty.jpg" alt="your image" width="100px" />
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label>Quầy làm việc</label>
+                                <select class="form-control" name="Quay_ID">
+                                    <option value="">---Chọn---</option>
+                                    @foreach (var item in lstQuay)
+                                    {
+                                        <option value="@item.ID">@item.Ten</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-12 text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">Thêm mới</button>
+                            </div>
+                        </div>
+
+                    }
+
+                </div><!-- /.box -->
+
+            </div><!--/.col (left) -->
+        </div>   <!-- /.row -->
+    </section>
+
+</div>
+
+
+@section jsAdmin{
+
+    <script>
+        imgInp.onchange = evt => {
+    		const [file] = imgInp.files
+    		if (file) {
+    			blah.src = URL.createObjectURL(file)
+    		}
+    	}
+        $(function () {
+
+            $(".datepicker").datepicker({
+                format: 'dd/mm/yyyy',
+                todayHighlight: true,
+                autoclose: true
+            });
+           CKEDITOR.replace('Descriptions');
+             // add the rule here
+            $.validator.addMethod("select_validate", function (value, element, arg) {
+                return arg !== value;
+            }, "Value must not equal arg.");
+
+            $('input[name="MaCB"]').on("blur", function () {
+
+                var macb = $(this).val();
+                 $.ajax({
+                    data: { MaCB: macb },
+                    url: '/admin/canbo/Check_Exist_MaCB',
+                    dataType: 'Json',
+                    type: 'POST',
+                     success: function (res) {
+                         if (res.status == true) {
+                           
+                            $('#lb_macb').addClass("error");
+                            $('#lb_macb').text("Mã cán bộ đã trùng");
+                            $("button[type='submit']").attr("disabled", "disabled");
+                        } else {
+                            
+                            $('#lb_macb').removeClass("error");
+                            $('#lb_macb').text("Mã cán bộ");
+                            $("button[type='submit']").removeAttr("disabled");
+                        }
+                    }
+                });
+
+            });
+
+            jQuery.validator.addMethod("phonenu", function (value, element) {
+                if (/^(09[0-9]|07[0|6|7|8|9]|03[2-9]|08[1-5])+([0-9]{7})\b/g.test(value)) {
+                    return true;
+                } else {
+                    return false;
+                };
+            }, "Invalid phone number");
+
+           $("#frmAdd").validate({
+               rules: {
+                    MaCB: "required",
+                    MatKhau: "required",
+                    HoTen: "required",
+                    NgaySinh: "required",
+                    QueQuan: "required",
+                    NgayLamViec: "required",
+                    Anh: "required",
+                    GioiThieu: {
+                        required: true,
+                        minlength: 20
+                   },
+                    SDT: {
+                        required: true,
+                        phonenu: true
+                    },
+                    GioiTinh: { select_validate: "" },
+                    Quay_ID: { select_validate: "" },
+                },
+                messages: {
+                    MaCB: "Vui lòng nhập mã cán bộ",
+                    MatKhau: "Vui lòng nhập mật khẩu",
+                    HoTen: "Vui lòng nhập họ tên cán bộ",
+                    NgaySinh: "Vui lòng nhập ngày sinh",
+                    QueQuan: "Vui lòng nhập quê quán",
+                    NgayLamViec: "Vui lòng chọn ngày bđ làm việc",
+                    Anh: "Vui lòng chọn hình ảnh cán bộ",
+                    GioiThieu: {
+                        required: "Vui lòng nhập nội dung giới thiệu cán bộ"
+                    },
+                    SDT: {
+                        required: "Vui lòng nhập số điện thoại",
+                        phonenu: "Số điện thoại không hợp lệ"
+                    },
+                    GioiTinh:{ select_validate: "Bạn chưa chọn giới tính!" },
+                    Quay_ID: { select_validate: "Bạn chưa chọn quầy làm việc!" }
+                }
+           });
+
+           
+        });
+
+    </script>
+
+}
+

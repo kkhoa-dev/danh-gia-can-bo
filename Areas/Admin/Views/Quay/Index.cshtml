@@ -1,0 +1,258 @@
+﻿@using DanhGiaCanBo.Models.EF;
+@{
+    ViewBag.Title = "Quản lý quầy";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    int dem = 1;
+}
+@model List<tbl_Quay>
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Danh sách quầy
+        </h1>
+        <ol class="breadcrumb">
+            <li><i class="fa fa-table"></i><a href="#">Quản lý chung</a></li>
+            <li class="active">Danh sách quầy</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            @if (TempData["message"] != null)
+            {
+                <div class="alert @TempData["alert"] text-center" id="AlertBox">
+                    @TempData["message"]
+                </div>
+            }
+           
+        </div>
+        <div class="row">
+            <div class="col-md-4" style="margin-bottom: 10px">
+                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#add">Thêm mới </button>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title text-center text-uppercase" id="exampleModalLabel">Thêm mới quầy</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @using (Html.BeginForm("frmAdd", "Quay", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmAdd" }))
+                        {
+                            <div class="form-group col-sm-12">
+                                <label for="recipient-name" class="col-form-label">Tên quầy:</label>
+                                <input type="text" name="Ten" class="form-control" required>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label for="recipient-name" class="col-form-label">Nội dung hỗ trợ:</label>
+                                <textarea id="editor1" name="ND_HoTro" required placeholder="Nhập nội dung hỗ trợ..." >
+                                </textarea>
+                            </div>
+                            
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-primary btn-lg">Thêm mới</button>
+                            </div>
+                        }
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        @*<h3 class="box-title">Loại danh mục</h3>*@
+
+                    </div><!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="tblData" class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">#</th>
+                                    <th class="text-center">Tên quầy</th>
+                                    <th class="text-center">Cán bộ</th>
+                                    <th class="text-center">Nội dung hỗ trợ</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach (var item in Model)
+                                {
+
+                                    <tr>
+                                        <td class="text-center">@dem</td>
+                                        <td class="text-center">@item.Ten</td>
+                                        <td class="text-center">
+                                            @if(item.tbl_CanBo != null)
+                                            {
+                                                foreach(var jtem in item.tbl_CanBo)
+                                                {
+                                                    <p>@jtem.HoTen</p>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <i>Quầy chưa có cán bộ làm việc</i>
+                                            }
+                                        </td>
+                                        <td>@Html.Raw(item.ND_HoTro)</td>
+                                        <td>
+                                            <button class="btn btn-default btnEdit" data-id="@item.ID" title="Cập nhật quầy"><i class="fa fa-edit"></i></button>
+                                            <button class="btn btn-danger btnDelete" data-id="@item.ID" title="Xóa quầy"><i class="fa fa-remove"></i></button>
+                                        </td>
+                                    </tr>
+                                    dem++;
+                                }
+
+                            </tbody>
+
+                        </table>
+                    </div><!-- /.box-body -->
+                </div><!-- /.box -->
+
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </section><!-- /.content -->
+</div>
+<!-- Modal -->
+<div class="modal fade edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center text-uppercase" id="exampleModalLabel">Cập nhật quầy</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("frmEdit", "Quay", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmEdit" }))
+                {
+                    <input type="hidden" name="ID" id="ID" />
+                    <div class="form-group col-sm-12">
+                        <label for="recipient-name" class="col-form-label">Tên quầy:</label>
+                        <input type="text" name="Ten" id="Ten" class="form-control" required>
+                    </div>
+                    <div class="form-group col-sm-12">
+                        <label for="recipient-name" class="col-form-label">Nội dung hỗ trợ:</label>
+                        <textarea name="ND_HoTro" id="ND_HoTro" placeholder="Nhập nội dung hỗ trợ..." style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" required>
+                        </textarea>
+                    </div>
+                    <div class="form-group text-center">
+                        <button type="submit" class="btn btn-primary btn-lg">Cập nhật</button>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section jsAdmin{
+
+    <script>
+        $(function () {
+            CKEDITOR.replace('editor1');
+            CKEDITOR.replace('ND_HoTro');
+            //nếu không có thao tác gìs thì ẩn đi
+            $('#AlertBox').removeClass('hide');
+
+            //Sau khi hiển thị lên thì delay 1s và cuộn lên trên sử dụng slideup
+            $('#AlertBox').delay(2000).slideUp(500);
+
+            $('.btnDelete').off('click').on('click', function () {
+
+                const notice = PNotify.notice({
+                    title: 'Thông báo',
+                    text: 'Bạn thật sự muốn xóa quầy này?',
+                    icon: 'fa fa-question-circle',
+                    width: '360px',
+                    minHeight: '110px',
+                    hide: false,
+                    closer: false,
+                    sticker: false,
+                    destroy: true,
+                    stack: new PNotify.Stack({
+                        dir1: 'down',
+                        modal: true,
+                        firstpos1: 25,
+                        overlayClose: false
+                    }),
+                    modules: new Map([
+                        ...PNotify.defaultModules,
+                        [PNotifyConfirm, {
+                            confirm: true
+                        }]
+                    ])
+                });
+
+                notice.on('pnotify:confirm', () =>
+                    $.ajax({
+                        data: { ID: $(this).data('id') },
+                        url: '/admin/quay/Delete',
+                        dataType: 'Json',
+                        type: 'POST',
+                        success: function (res) {
+                            if (res.status == true) {
+                                PNotify.success({
+                                    title: 'THÔNG BÁO!!',
+                                    text: 'Xóa quầy thành công.'
+                                });
+                                setTimeout(function () {
+                                    window.location.href = "/admin/quay";
+                                }, 2000);
+
+                            } else {
+                                PNotify.error({
+                                    title: 'THÔNG BÁO!!',
+                                    text: 'Xóa quầy KHÔNG thành công.'
+                                });
+                            }
+                        }
+                    })
+
+                );
+                //notice.on('pnotify:cancel', () => alert('Oh ok. Chicken, I see.'));
+
+            });
+
+
+            $('.btnEdit').click(function (event) {
+                $('.edit').modal('show');
+                //alert($(this).data('id'));
+                var ID = $(this).data('id');
+                $.ajax({
+                    url: "/admin/quay/GetByID/" + ID,
+                    type: 'GET',
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+                        $('#Ten').val(res.Ten);
+                        $('#ID').val(res.ID);
+
+                        CKEDITOR.instances['ND_HoTro'].setData(res.ND_HoTro);
+                    }
+                });
+            });
+
+        });
+
+    </script>
+
+}

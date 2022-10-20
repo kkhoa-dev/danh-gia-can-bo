@@ -1,0 +1,175 @@
+﻿@using DanhGiaCanBo.Models.EF;
+@model PagedList.IPagedList<tbl_CanBo>
+@using PagedList.Mvc
+@{
+    ViewBag.Title = "Trang chủ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main">
+    <!-- ======= Intro Single ======= -->
+    <section class="intro-single">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 col-lg-8">
+                    <form action="/" method="get" class="form-a">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-group">
+                                    <label for="inputName">Nhập họ và tên / mã cán bộ</label>
+                                    <input type="text" class="form-control form-control-lg form-control-a" name="keyword" id="txtKeyword" placeholder="Nhập... *" value="@(ViewBag.keyword!=null?ViewBag.keyword:"")" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6" style="margin-top: 23px">
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary btn-lg">Tìm kiếm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-12 col-lg-4">
+                    <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="/">Trang chủ</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                Danh sách cán bộ
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section><!-- End Intro Single-->
+    <!-- =======  Blog Grid ======= -->
+    <section class="news-grid grid">
+        <div class="container">
+            <div class="row">
+
+                @foreach (var item in Model)
+                {
+                    <div class="col-md-3">
+                        <div class="card-box-b card-shadow news-box">
+                            <div class="img-box-b">
+                                <img src="~/Assets/Client/img/canbo/@item.Anh" alt="" class="img-b img-fluid">
+                            </div>
+                            <div class="card-overlay">
+                                <div class="card-header-b">
+                                    <div class="card-category-b">
+                                        <a href="#" class="category-b">@item.tbl_Quay.Ten</a>
+                                    </div>
+                                    <div class="card-title-b">
+                                        <h2 class="title-2">
+                                            <a href="/home/detail/@item.ID">
+                                                @item.HoTen
+                                            </a>
+                                        </h2>
+                                    </div>
+                                    <div class="card-date">
+                                        <span class="date-b">Mã cán bộ: <b>@item.MaCB</b></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <nav class="pagination-a">
+                        <ul class="pagination justify-content-end">
+                            @if (Model.PageNumber < 1)
+                            {
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="@Url.Action("index", new { Page = Model.PageNumber - 1 })" tabindex="-1">
+                                        <span class="bi bi-chevron-left"></span>
+                                    </a>
+                                </li>
+                            }
+
+                            @for (int i = 1; i <= Model.PageCount; i++)
+                            {
+                                <li class="page-item @(Model.PageNumber == i ? "active": "")">
+                                    <a class="page-link" href="@Url.Action("index", new { Page = i })">@i</a>
+                                </li>
+                            }
+
+                            @if (Model.PageNumber < Model.PageCount)
+                            {
+                                <li class="page-item next">
+                                    <a class="page-link" href="@Url.Action("index", new { Page = Model.PageNumber + 1 })">
+                                        <span class="bi bi-chevron-right"></span>
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section><!-- End Blog Grid-->
+
+</main>
+
+@section jsSection{
+
+    <script>
+        var common = {
+            init: function () {
+                common.registerEvent();
+            },
+            registerEvent: function () {
+                $("#txtKeyword").autocomplete({
+                    minLength: 0,
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "/home/listname",//Link lấy dữ liệu gợi ý
+                            dataType: "json",
+                            data: {
+                                q: request.term
+                            },
+                            success: function (res) {
+                                //response(res.data);
+                                response($.map(res.data, function (item) {
+                                    return {
+                                        macb: item.MaCB,
+                                        anh: item.Anh,
+                                        hoten: item.HoTen
+                                    }
+                                }));
+                            }
+                        });
+                    },
+                    focus: function (event, ui) {
+                        $("#txtKeyword").val(ui.item.hoten);
+                        return false;
+                    },
+                    select: function (event, ui) {
+                        $("#txtKeyword").val(ui.item.hoten);
+                        //$("#project-id").val(ui.item.value);
+                        //$("#project-description").html(ui.item.desc);
+                        //$("#project-icon").attr("src", "images/" + ui.item.icon);
+
+                        return false;
+                    }
+                })
+                    .autocomplete("instance")._renderItem = function (ul, item) {
+                        return $("<li>")
+                            .append("<div><img src='Assets/Client/img/canbo/" + item.anh + "' style='width: 70px;'/>" + "<span style='font-size: 18px; padding-left: 5px'><b>" + item.hoten + "</b> - Mã CB: <b>" + item.macb + "</b></span></div>")
+                            .appendTo(ul);
+                    };
+            }
+        }
+        common.init();
+    </script>
+
+    <script>
+        $(function () {
+
+        });
+    </script>
+
+}

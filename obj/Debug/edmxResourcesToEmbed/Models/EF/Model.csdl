@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DanhGiaCBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="tbl_Admin">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TaiKhoan" Type="String" MaxLength="250" FixedLength="true" Unicode="true" />
+    <Property Name="MatKhau" Type="String" MaxLength="250" FixedLength="true" Unicode="true" />
+    <Property Name="HoTen" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="TrangThai" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="tbl_CanBo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MaCB" Type="String" MaxLength="250" FixedLength="true" Unicode="true" />
+    <Property Name="MatKhau" Type="String" MaxLength="250" FixedLength="true" Unicode="true" />
+    <Property Name="HoTen" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="NgaySinh" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+    <Property Name="QueQuan" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
+    <Property Name="GioiTinh" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SDT" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NgayLamViec" Type="DateTime" Precision="3" />
+    <Property Name="Quay_ID" Type="Int32" />
+    <Property Name="TrangThai" Type="Boolean" />
+    <NavigationProperty Name="tbl_Quay" Relationship="Self.FK_tbl_CanBo_tbl_Quay" FromRole="tbl_CanBo" ToRole="tbl_Quay" />
+    <NavigationProperty Name="tbl_DanhGia" Relationship="Self.FK_tbl_DanhGia_tbl_CanBo" FromRole="tbl_CanBo" ToRole="tbl_DanhGia" />
+    <Property Name="Anh" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="GioiThieu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="tbl_DanhGia">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CanBo_ID" Type="Int32" />
+    <Property Name="KhaoSat_ID" Type="Int32" />
+    <Property Name="NoiDung" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="NgayDG" Type="DateTime" Precision="3" />
+    <Property Name="GhiChu" Type="String" MaxLength="450" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tbl_CanBo" Relationship="Self.FK_tbl_DanhGia_tbl_CanBo" FromRole="tbl_DanhGia" ToRole="tbl_CanBo" />
+    <NavigationProperty Name="tbl_KhaoSat" Relationship="Self.FK_tbl_DanhGia_tbl_KhaoSat" FromRole="tbl_DanhGia" ToRole="tbl_KhaoSat" />
+  </EntityType>
+  <EntityType Name="tbl_KhaoSat">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NoiDung" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="tbl_DanhGia" Relationship="Self.FK_tbl_DanhGia_tbl_KhaoSat" FromRole="tbl_KhaoSat" ToRole="tbl_DanhGia" />
+  </EntityType>
+  <EntityType Name="tbl_Quay">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Ten" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ND_HoTro" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="tbl_CanBo" Relationship="Self.FK_tbl_CanBo_tbl_Quay" FromRole="tbl_Quay" ToRole="tbl_CanBo" />
+  </EntityType>
+  <Association Name="FK_tbl_CanBo_tbl_Quay">
+    <End Role="tbl_Quay" Type="Self.tbl_Quay" Multiplicity="0..1" />
+    <End Role="tbl_CanBo" Type="Self.tbl_CanBo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_Quay">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="tbl_CanBo">
+        <PropertyRef Name="Quay_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_DanhGia_tbl_CanBo">
+    <End Role="tbl_CanBo" Type="Self.tbl_CanBo" Multiplicity="0..1" />
+    <End Role="tbl_DanhGia" Type="Self.tbl_DanhGia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_CanBo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="tbl_DanhGia">
+        <PropertyRef Name="CanBo_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tbl_DanhGia_tbl_KhaoSat">
+    <End Role="tbl_KhaoSat" Type="Self.tbl_KhaoSat" Multiplicity="0..1" />
+    <End Role="tbl_DanhGia" Type="Self.tbl_DanhGia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tbl_KhaoSat">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="tbl_DanhGia">
+        <PropertyRef Name="KhaoSat_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DanhGiaCBEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="tbl_Admin" EntityType="Self.tbl_Admin" />
+    <EntitySet Name="tbl_CanBo" EntityType="Self.tbl_CanBo" />
+    <EntitySet Name="tbl_DanhGia" EntityType="Self.tbl_DanhGia" />
+    <EntitySet Name="tbl_KhaoSat" EntityType="Self.tbl_KhaoSat" />
+    <EntitySet Name="tbl_Quay" EntityType="Self.tbl_Quay" />
+    <AssociationSet Name="FK_tbl_CanBo_tbl_Quay" Association="Self.FK_tbl_CanBo_tbl_Quay">
+      <End Role="tbl_Quay" EntitySet="tbl_Quay" />
+      <End Role="tbl_CanBo" EntitySet="tbl_CanBo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_DanhGia_tbl_CanBo" Association="Self.FK_tbl_DanhGia_tbl_CanBo">
+      <End Role="tbl_CanBo" EntitySet="tbl_CanBo" />
+      <End Role="tbl_DanhGia" EntitySet="tbl_DanhGia" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tbl_DanhGia_tbl_KhaoSat" Association="Self.FK_tbl_DanhGia_tbl_KhaoSat">
+      <End Role="tbl_KhaoSat" EntitySet="tbl_KhaoSat" />
+      <End Role="tbl_DanhGia" EntitySet="tbl_DanhGia" />
+    </AssociationSet>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(DanhGiaCBModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(DanhGiaCBModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>

@@ -1,0 +1,186 @@
+﻿@using DanhGiaCanBo.Models.EF;
+@{
+    var canbo = ViewBag.CanBo as tbl_CanBo;
+    ViewBag.Title = canbo.HoTen;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var lstKhaosat = ViewBag.lstKhaosat as List<tbl_KhaoSat>;
+    int dem = 1;
+}
+
+    <main id="main">
+        <section class="intro-single">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-lg-8">
+                    </div>
+                    <div class="col-md-12 col-lg-4">
+                        <nav aria-label="breadcrumb" class="breadcrumb-box d-flex justify-content-lg-end">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <a href="/">Trang chủ</a>
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    @canbo.HoTen
+                                </li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section>
+       
+        <!-- ======= Agent Single ======= -->
+        <section class="agent-single">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="agent-avatar-box">
+                                    <img src="~/Assets/Client/img/canbo/@canbo.Anh" alt="" class="agent-avatar img-fluid">
+                                </div>
+                            </div>
+                            <div class="col-md-5 section-md-t3">
+                                <div class="agent-info-box">
+                                    <div class="agent-title">
+                                        <div class="title-box-d">
+                                            <h3 class="title-d">
+                                                @canbo.HoTen
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <div class="agent-content mb-3">
+                                        <p class="content-d color-text-a">
+                                            @Html.Raw(canbo.GioiThieu)
+                                        </p>
+                                        <div class="info-agents color-a">
+                                            <p>
+                                                <strong>Ngày sinh: </strong>
+                                                <span class="color-text-a"> @canbo.NgaySinh</span>
+                                            </p>
+                                            <p>
+                                                <strong>Giới tính: </strong>
+                                                <span class="color-text-a"> @canbo.GioiTinh</span>
+                                            </p>
+                                            <p>
+                                                <strong>Điện thoại: </strong>
+                                                <span class="color-text-a"> @canbo.SDT </span>
+                                            </p>
+                                            <p>
+                                                <strong>Quê quán: </strong>
+                                                <span class="color-text-a"> @canbo.QueQuan</span>
+                                            </p>
+                                            <p>
+                                                <strong>Ngày bắt đầu làm việc: </strong>
+                                                <span class="color-text-a"> @canbo.NgayLamViec.Value.ToString("dd-MM-yyyy")</span>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 section-t8" style="margin-top: 20px">
+                        <div class="title-box-d">
+                            <h3 class="title-d">Khảo sát - đánh giá cán bộ</h3>
+                        </div>
+                    </div>
+                    <div class="row property-grid grid">
+                        @foreach (var item in lstKhaosat)
+                        {
+                            <div class="col-sm-6">
+                                <div class="post-content color-text-a">
+                                    <p class="post-intro">
+                                        <i class="bi bi-chevron-right"></i> Câu @dem:
+                                        @item.NoiDung
+                                    </p>
+                                    <blockquote class="blockquote">
+                                        <p>
+                                            <label>
+                                                <i class="bi bi-emoji-laughing-fill" style="color: khaki"></i>
+                                                <input type="radio" name="_@item.ID" value="Rất hài lòng" data-id="@item.ID">
+                                                Rất hài lòng
+                                            </label>
+                                        </p>
+                                        <p>
+                                            <label>
+                                                <i class="bi bi-emoji-neutral-fill" style="color:khaki"></i>
+                                                <input type="radio" name="_@item.ID" value="Hài lòng" data-id="@item.ID">
+                                                Hài lòng
+                                            </label>
+                                        </p>
+                                        <p>
+                                            <label>
+                                                <i class="bi bi-emoji-angry-fill" style="color: khaki"></i>
+                                                <input type="radio" name="_@item.ID" value="Chưa hài lòng" data-id="@item.ID">
+                                                Chưa hài lòng
+                                            </label>
+                                        </p>
+                                    </blockquote>
+                                </div>
+                            </div>
+                            dem++;
+                        }
+                        <div class="col-sm-12">
+                            <div class="post-content color-text-a">
+                                <p class="post-intro">
+                                    <i class="bi bi-chevron-right"></i> Đánh giá khác (nếu có):
+                                </p>
+                                <div class="form-group">
+                                    <textarea name="GhiChu" id="GhiChu" class="form-control" cols="45" rows="8" placeholder="Nhập ý kiến khác..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-center" style="margin-top: 50px;">
+                            <button type="button" class="btn btn-lg btn-success" id="btnDanhGia">Gửi đánh giá</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section><!-- End Agent Single -->
+
+    </main>
+
+@section jsSection{
+
+    <script>
+        $(function () {
+
+            $('#btnDanhGia').on('click', function () {
+                var data = [];
+                $('input[type="radio"]:checked').each(function () {
+                    data.push({
+                        CanBo_ID: @canbo.ID,
+                        KhaoSat_ID: $(this).data('id'),
+                        NoiDung: $(this).val(),
+                        GhiChu: $('#GhiChu').val(),
+                    });
+                });
+                console.log(data);
+
+
+                $.ajax({
+                    url: '/Home/addDanhGia',
+                    data: { json_danhgia: JSON.stringify(data) },
+                    type: 'POST',
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.status == true) {
+                            window.location.href = "/danh-gia-thanh-cong";
+                        } else {
+                                PNotify.error({
+                                title: 'THÔNG BÁO!!',
+                                text: 'Đã có lỗi xảy ra, bạn vui lòng đánh giá cán bộ vào thời gian tới.'
+                            });
+                        }
+
+
+                    }
+                });
+            });
+
+        });
+    </script>
+
+}
